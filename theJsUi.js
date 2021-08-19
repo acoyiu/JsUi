@@ -221,7 +221,8 @@
                 alignItems: 'center',
                 width: '100%',
                 height: '100%',
-            });
+            }
+        );
         Array.from(arguments).forEach(
             args => {
                 if (args.nodeName) {
@@ -256,6 +257,13 @@
         inputTag.dataset.type = 'Input';
         inputTag.setAttribute('type', typeString);
         inputTag.setAttribute('value', buttonText);
+        _addCss(
+            inputTag,
+            {
+                width: '100%',
+                height: '100%',
+            }
+        );
         return _functionFactory(inputTag);
     }
 
@@ -342,6 +350,8 @@
     //         Img,
     //         Txt,
     //         Input,
+    //         Fixed, 
+    //         Absolute,
 
     //         _reactive,
 

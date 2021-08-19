@@ -7,6 +7,8 @@
 <script>
     const {
         Mount,
+        Fixed,
+        Absolute,
         Column,
         Row,
         Center,
@@ -18,63 +20,75 @@
     } = window.TheJsUi;
 
 
-
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    const
-        tarTxt = _reactive('sampleText'),
-        imgPath = _reactive('./pic1.jpg'),
-        soImage = _reactive([
-            './so1.jpg',
-            './so2.jpg',
-            './so3.jpg',
-        ]);
-
-
-    const hundredPxImg = {
-        width: '100px',
-        height: '100px',
-    }
 
 
     Mount(
         document.body,
         () =>
-            Column(
-                Txt(_reactive),
-
-                ...soImage.value.map(path =>
-                    Box(
-                        Img(path)
-                            .Css({
-                                width: '200px',
-                                height: '200px',
-                            }),
-                        Txt(tarTxt)
-                    ),
-                ),
-
-                Input(
-                    'button',
-                    'please press'
+            Box(
+                Fixed(
+                    Row(
+                        ...(() => {
+                            const navEleCss = {
+                                marginLeft: '0.5rem',
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                            };
+                            return [
+                                Input(
+                                    'button',
+                                    'Gmail')
+                                    .Css(navEleCss),
+                                Input(
+                                    'button',
+                                    'Images')
+                                    .Css(navEleCss),
+                                Img('./assets/navDot.png')
+                                    .Css({
+                                        width: '2rem',
+                                        objectFit: 'contain',
+                                        ...navEleCss,
+                                    }),
+                                Img('./assets/navHead.png')
+                                    .Css(navEleCss),
+                            ]
+                        })().flat()
+                    ).Css({
+                        alignItems: 'center',
+                    }),
                 ).Css({
-                    backgroundColor: 'teal',
-                    color: 'white',
+                    top: 0,
+                    right: 0,
+                    margin: '0.5rem',
                 }),
 
-                Box(
-                    Row(
-                        ...soImage.value.map(path => {
-                            return [
-                                Img(path)
-                                    .Css({
-                                        width: '200px',
-                                        height: '200px',
-                                    }),
-                                Txt(tarTxt),
-                            ];
-                        }).flat(),
-                    ),
-                ),
+                Center(
+                    Column(
+                        Img(`./assets/icon.png`)
+                            .Css({
+                                height: '16vh',
+                                objectFit: 'contain',
+                            }),
+                        Box(
+                            Row(
+                                Img('./assets/mag.png'),
+                                Input(
+                                    'text',
+                                    'Search Google or type a URL'
+                                ).Css({
+                                    width: '50vw',
+                                    padding: '0.25rem 1rem',
+                                    borderRadius: '5rem',
+                                    border: 'solid 1px grey',
+                                }),
+                                Img('./assets/mic.png'),
+                            ).Css({
+                                height: '2rem'
+                            }),
+                        ),
+                    )
+                )
             )
     );
 </script>
