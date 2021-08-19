@@ -1,0 +1,80 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+    <script src="./theJsUi.js"></script>
+</head>
+
+<body></body>
+<script>
+    const {
+        Mount,
+        Column,
+        Row,
+        Center,
+        Box,
+        Img,
+        Txt,
+        Input,
+        _reactive,
+    } = window.TheJsUi;
+
+
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    const
+        tarTxt = _reactive('sampleText'),
+        imgPath = _reactive('./pic1.jpg'),
+        soImage = _reactive([
+            './so1.jpg',
+            './so2.jpg',
+            './so3.jpg',
+        ]);
+
+
+    const hundredPxImg = {
+        width: '100px',
+        height: '100px',
+    }
+
+
+    Mount(
+        document.body,
+        () =>
+            Column(
+                Txt(_reactive),
+
+                ...soImage.value.map(path =>
+                    Box(
+                        Img(path)
+                            .Css({
+                                width: '200px',
+                                height: '200px',
+                            }),
+                        Txt(tarTxt)
+                    ),
+                ),
+
+                Input(
+                    'button',
+                    'please press'
+                ).Css({
+                    backgroundColor: 'teal',
+                    color: 'white',
+                }),
+
+                Box(
+                    Row(
+                        ...soImage.value.map(path => {
+                            return [
+                                Img(path)
+                                    .Css({
+                                        width: '200px',
+                                        height: '200px',
+                                    }),
+                                Txt(tarTxt),
+                            ];
+                        }).flat(),
+                    ),
+                ),
+            )
+    );
+</script>
