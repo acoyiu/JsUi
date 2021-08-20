@@ -302,6 +302,7 @@
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+
     const proxyArrayHandler = arr => {
         return new Proxy(arr, {
             apply: function (target, thisArg, argumentsList) {
@@ -329,6 +330,8 @@
         }
     };
 
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     function _reactive(passingIn) {
         if (Array.isArray(passingIn)) {
             passingIn = passingIn.map(value => _reactive(value));
@@ -365,12 +368,40 @@
 
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    const valProxy = {
+        get: function (obj, prop) { return obj[prop]; },
+        set: function (obj, prop, value) {
+
+            if (Array.isArray(value)) {
+                obj[prop] = proxyArrayHandler(value);
+            }
+            else {
+                switch (typeof value) {
+                    case 'string':
+                    case 'number':
+                    case 'boolean':
+                        obj[prop] = value;
+                        break;
+                    case 'object':
+                        obj[prop] = new Proxy(value, valProxy);
+                        break;
+                }
+            }
+            requestAnimationFrame(Mount.forceUpdate ? Mount.forceUpdate : () => { });
+            return obj[prop];
+        }
+    };
+
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     Object.defineProperty(Array.prototype, 'forEachReturn', {
         value: function (cb) {
             this.forEach((curVal, windex) => this[windex] = cb(curVal));
             return this;
         },
     });
+
+    const prox = new Proxy({}, valProxy);
 
     window.TheJsUi = {
         Mount,
@@ -384,6 +415,8 @@
         Txt,
         Input,
         _reactive,
+        _reactor: prox,
+        _R: prox,
     };
 
 
