@@ -7,9 +7,6 @@
 
         Mount.updateMounted = Mount.forceUpdate = () => {
             const updateDom = domCreateFunction();
-            // console.log('updateDom', updateDom);
-            // console.log('latestDom', latestDom);
-            // console.log('latestDom.parentElement', latestDom.parentElement);
             Mount.compareDom(updateDom);
         };
 
