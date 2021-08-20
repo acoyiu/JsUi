@@ -44,6 +44,22 @@
         ]);
 
 
+    const logoSwitch = _reactive(true);
+    setTimeout(() => {
+        logoSwitch.value = false;
+        setTimeout(() => {
+            logoSwitch.value = true;
+        }, 1000);
+    }, 3000);
+
+
+    const inputUpdate = e => {
+        console.log('owugr');
+        console.log(e);
+        console.log(e.currentTarget);
+    };
+
+
     Mount(
         document.body,
         () =>
@@ -57,18 +73,10 @@
                                 border: 'none',
                             };
                             return [
-                                Input('button', 'Gmail')
-                                    .Css(navEleCss),
-                                Input('button', 'Images')
-                                    .Css(navEleCss),
-                                Img('./assets/navDot.png')
-                                    .Css({
-                                        width: '2rem',
-                                        objectFit: 'contain',
-                                        ...navEleCss,
-                                    }),
-                                Img('./assets/navHead.png')
-                                    .Css(navEleCss),
+                                Input('button', 'Gmail').Css(navEleCss),
+                                Input('button', 'Images').Css(navEleCss),
+                                Img('./assets/navDot.png').Css({ width: '2rem', objectFit: 'contain', ...navEleCss, }),
+                                Img('./assets/navHead.png').Css(navEleCss),
                             ]
                         })().flat()
                     ).Css({
@@ -82,27 +90,18 @@
 
                 Center(
                     Column(
-                        Img(`./assets/icon.png`)
-                            .Css({
-                                height: '9rem',
-                                objectFit: 'contain',
-                            }),
+                        logoSwitch.value
+                            ? Img(`./assets/icon.png`).Css({ height: '9rem', objectFit: 'contain', })
+                            : Img(`./assets/s07.jpg`),
                         Box(
                             Row(
                                 Img('./assets/mag.png'),
-                                Input(
-                                    'text',
-                                    'Search Google or type a URL'
-                                ).Css({
-                                    width: '50vw',
-                                    padding: '0.25rem 1rem',
-                                    borderRadius: '5rem',
-                                    border: 'solid 1px grey',
-                                }),
+                                Input('text')
+                                    .Attribute({ placeholder: 'Search Google or type a URL' })
+                                    .Css({ width: '50vw', padding: '0.25rem 1rem', borderRadius: '5rem', border: 'solid 1px grey', })
+                                    .Event('change', inputUpdate),
                                 Img('./assets/mic.png'),
-                            ).Css({
-                                height: '2rem'
-                            }),
+                            ).Css({ height: '2rem' }),
                         ),
                         Column(
                             Row(
@@ -118,42 +117,18 @@
                             ),
                             Row(
                                 Center(
-                                    ...imgArray2.value.map(
-                                        el =>
-                                            ImgButtonComponent(
-                                                el.value[0].value,
-                                                el.value[1].value
-                                            )
-                                    ),
+                                    ...imgArray2.value.map(el => ImgButtonComponent(el.value[0].value, el.value[1].value)),
                                     Column(
                                         Img('./assets/s07.jpg'),
                                         Txt('Add Shortcut'),
                                     ),
                                 ),
-                            ).Css({
-                                marginTop: '1rem'
-                            }),
+                            ).Css({ marginTop: '1rem' }),
                         )
-                            .Css(
-                                'img',
-                                {
-                                    width: '5rem',
-                                    height: '5rem',
-                                    objectFit: 'contain',
-                                    padding: '0 0.5rem'
-                                }
-                            )
-                            .Css(
-                                'p',
-                                { textAlign: ' center', }
-                            )
-                            .Css({
-                                marginTop: '1.5rem',
-                            })
-                            .Attribute({
-                                class: 'custom',
-                                id: 'theColumn'
-                            }),
+                            .Css('img', { width: '5rem', height: '5rem', objectFit: 'contain', padding: '0 0.5rem' })
+                            .Css('p', { textAlign: ' center', })
+                            .Css({ marginTop: '1.5rem', })
+                            .Attribute({ class: 'custom', id: 'theColumn' }),
                     )
                 )
             )
