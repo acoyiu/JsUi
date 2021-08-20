@@ -5,7 +5,7 @@
         setTimeout(() => requestAnimationFrame(() => mountTarget.appendChild(latestDom)), 10);
 
 
-        Mount.updateMounted = () => {
+        Mount.updateMounted = Mount.forceUpdate = () => {
             const updateDom = domCreateFunction();
             // console.log('updateDom', updateDom);
             // console.log('latestDom', latestDom);
@@ -51,7 +51,6 @@
                 // if innerHTML text not match, update dom
                 if (newEle.innerHTML !== oldEle.innerHTML) {
                     Mount.updateEle(newEle, oldEle);
-                    console.log('d');
                     return;
                 }
             }
@@ -103,7 +102,7 @@
     function _addAttribute(element, attiObj) {
         for (const attributeName in attiObj) {
             const attiValue = attiObj[attributeName];
-            element.setAttribute(attributeName, attiValue); 
+            element.setAttribute(attributeName, attiValue);
         }
     }
 
@@ -302,6 +301,25 @@
 
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    const proxyArrayHandler = arr => {
+        return new Proxy(arr, {
+            apply: function (target, thisArg, argumentsList) {
+                requestAnimationFrame(Mount.forceUpdate);
+                return thisArg[target].apply(this, argumentList);
+            },
+            deleteProperty: function (target, property) {
+                requestAnimationFrame(Mount.forceUpdate);
+                return true;
+            },
+            set: function (target, property, value, receiver) {
+                requestAnimationFrame(Mount.forceUpdate);
+                target[property] = value;
+                return true;
+            }
+        });
+    }
+
     const proxyHandler = {
         get: function (obj, prop) { return obj[prop]; },
         set: function (obj, prop, value) {
@@ -311,17 +329,10 @@
         }
     };
 
-
     function _reactive(passingIn) {
         if (Array.isArray(passingIn)) {
             passingIn = passingIn.map(value => _reactive(value));
-            return new Proxy(
-                {
-                    value: passingIn,
-                    _isReactive: true,
-                },
-                proxyHandler
-            );
+            return proxyArrayHandler(passingIn);
         }
         else {
             switch (typeof passingIn) {
@@ -335,11 +346,17 @@
                         },
                         proxyHandler
                     );
-                case 'boolean':
+                case 'object':
                     Object.keys(passingIn).forEach(keyName => {
                         passingIn[keyName] = _reactive(passingIn[keyName]);
                     });
-                    break;
+                    return new Proxy(
+                        {
+                            value: passingIn,
+                            _isReactive: true,
+                        },
+                        proxyHandler
+                    );
                 default:
                     throw new Error('No type inferred.');
             }

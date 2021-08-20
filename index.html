@@ -1,6 +1,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
-    <script src="./theJsUi.js"></script>
+    <script src="./JavascriptUi.js"></script>
 </head>
 
 <body></body>
@@ -39,22 +39,38 @@
             ['./assets/s04.png', 'Text A'],
         ]),
         imgArray2 = _reactive([
-            ['./assets/s05.png', 'Text A'],
-            ['./assets/s06.png', 'Text A'],
+            {
+                iPath: './assets/s05.png',
+                sText: 'Text A'
+            },
+            {
+                iPath: './assets/s06.png',
+                sText: 'Text A'
+            },
         ]);
 
 
     const logoSwitch = _reactive(true);
-    setTimeout(() => {
+    (async () => {
+        await new Promise(res => setTimeout(res, 3000));
+
+        // update of _reactive
         logoSwitch.value = false;
-        setTimeout(() => {
-            logoSwitch.value = true;
-        }, 1000);
-    }, 3000);
+        imgArray.pop();
+
+        await new Promise(res => setTimeout(res, 1000));
+
+        logoSwitch.value = true;
+
+        // create new _reactive in adding into document
+        imgArray.push(_reactive(['./assets/s05.png', 'Not test']));
+
+        // update reactive object
+        imgArray2[0].value.sText.value = 'yellow box';
+    })();
 
 
     const inputUpdate = e => {
-        console.log('owugr');
         console.log(e);
         console.log(e.currentTarget);
     };
@@ -92,13 +108,13 @@
                     Column(
                         logoSwitch.value
                             ? Img(`./assets/icon.png`).Css({ height: '9rem', objectFit: 'contain', })
-                            : Img(`./assets/s07.jpg`),
+                            : Img(`./assets/s07.jpg`).Css({ height: '9rem', objectFit: 'contain', }),
                         Box(
                             Row(
                                 Img('./assets/mag.png'),
                                 Input('text')
                                     .Attribute({ placeholder: 'Search Google or type a URL' })
-                                    .Css({ width: '50vw', padding: '0.25rem 1rem', borderRadius: '5rem', border: 'solid 1px grey', })
+                                    .Css({ width: '50vw', padding: '0.25rem 1rem', borderRadius: '5rem', border: 'solid 1px grey', outline: 'none' })
                                     .Event('change', inputUpdate),
                                 Img('./assets/mic.png'),
                             ).Css({ height: '2rem' }),
@@ -106,18 +122,21 @@
                         Column(
                             Row(
                                 Center(
-                                    ...imgArray.value.map(
+                                    ...imgArray.map(
                                         el =>
                                             ImgButtonComponent(
-                                                el.value[0].value,
-                                                el.value[1].value
+                                                el[0].value,
+                                                el[1].value
                                             )
                                     ),
                                 ),
                             ),
                             Row(
                                 Center(
-                                    ...imgArray2.value.map(el => ImgButtonComponent(el.value[0].value, el.value[1].value)),
+                                    ...imgArray2.map(el => ImgButtonComponent(
+                                        el.value.iPath.value,
+                                        el.value.sText.value
+                                    )),
                                     Column(
                                         Img('./assets/s07.jpg'),
                                         Txt('Add Shortcut'),
