@@ -23,6 +23,27 @@
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
+    const ImgButtonComponent = (imgPath, targetTxt) => {
+        return Column(
+            Img(imgPath),
+            Txt(targetTxt),
+        );
+    };
+
+
+    const
+        imgArray = _reactive([
+            ['./assets/s01.png', 'Text A'],
+            ['./assets/s02.png', 'Text A'],
+            ['./assets/s03.png', 'Text A'],
+            ['./assets/s04.png', 'Text A'],
+        ]),
+        imgArray2 = _reactive([
+            ['./assets/s05.png', 'Text A'],
+            ['./assets/s06.png', 'Text A'],
+        ]);
+
+
     Mount(
         document.body,
         () =>
@@ -36,13 +57,9 @@
                                 border: 'none',
                             };
                             return [
-                                Input(
-                                    'button',
-                                    'Gmail')
+                                Input('button', 'Gmail')
                                     .Css(navEleCss),
-                                Input(
-                                    'button',
-                                    'Images')
+                                Input('button', 'Images')
                                     .Css(navEleCss),
                                 Img('./assets/navDot.png')
                                     .Css({
@@ -67,7 +84,7 @@
                     Column(
                         Img(`./assets/icon.png`)
                             .Css({
-                                height: '16vh',
+                                height: '9rem',
                                 objectFit: 'contain',
                             }),
                         Box(
@@ -87,6 +104,56 @@
                                 height: '2rem'
                             }),
                         ),
+                        Column(
+                            Row(
+                                Center(
+                                    ...imgArray.value.map(
+                                        el =>
+                                            ImgButtonComponent(
+                                                el.value[0].value,
+                                                el.value[1].value
+                                            )
+                                    ),
+                                ),
+                            ),
+                            Row(
+                                Center(
+                                    ...imgArray2.value.map(
+                                        el =>
+                                            ImgButtonComponent(
+                                                el.value[0].value,
+                                                el.value[1].value
+                                            )
+                                    ),
+                                    Column(
+                                        Img('./assets/s07.jpg'),
+                                        Txt('Add Shortcut'),
+                                    ),
+                                ),
+                            ).Css({
+                                marginTop: '1rem'
+                            }),
+                        )
+                            .Css(
+                                'img',
+                                {
+                                    width: '5rem',
+                                    height: '5rem',
+                                    objectFit: 'contain',
+                                    padding: '0 0.5rem'
+                                }
+                            )
+                            .Css(
+                                'p',
+                                { textAlign: ' center', }
+                            )
+                            .Css({
+                                marginTop: '1.5rem',
+                            })
+                            .Attribute({
+                                class: 'custom',
+                                id: 'theColumn'
+                            }),
                     )
                 )
             )

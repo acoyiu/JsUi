@@ -104,23 +104,95 @@
     function _addAttribute(element, attiObj) {
         for (const attributeName in attiObj) {
             const attiValue = attiObj[attributeName];
-            if (attributeName === 'class') {
+            if (attributeName === 'id') {
+                element.setAttribute('id', attiValue);
+            }
+            else if (attributeName === 'class') {
                 element.setAttribute('class', attiValue);
-            } else {
+            }
+            else {
                 element.dataset[attributeName] = attiValue;
             }
         }
     }
 
+    // function _applyCssObjToAllChildren(cssObject, childrenArray) {
+    //     childrenArray.forEach(domEl => {
+    //         console.log(domEl, cssObject);
+    //         _addCss(domEl, cssObject);
+    //         if (domEl.children.length > 0)
+    //             _applyCssObjToAllChildren(
+    //                 cssObject,
+    //                 Array.from(
+    //                     domEl.children
+    //                 )
+    //             );
+    //     });
+    // }
     function _functionFactory(domObject) {
-        domObject.Css = cssObject => {
-            _addCss(domObject, cssObject);
-            return domObject;
+        domObject.Css = function (cssObject) {
+            // for all children inside
+            if (
+                arguments.length === 1 &&
+                typeof arguments[0] === 'object'
+            ) {
+                _addCss(domObject, cssObject);
+                return domObject;
+            }
+
+            // for querySelector
+            else if (
+                arguments.length == 2 &&
+                typeof arguments[0] === 'string' &&
+                typeof arguments[1] === 'object'
+            ) {
+                const [selector, cssObj] = arguments;
+                Array.from(domObject.querySelectorAll(selector)).forEach(el => _addCss(el, cssObj));
+                return domObject;
+            }
+
+
+            else {
+                throw new Error('No function override found.');
+            }
         };
         domObject.Attribute = attibuteObj => {
             _addAttribute(domObject, attibuteObj);
             return domObject;
         };
+        // domObject.CssInherit = function () {
+        //     // for all children inside
+        //     if (
+        //         arguments.length === 1 &&
+        //         typeof arguments[0] === 'object'
+        //     ) {
+        //         _applyCssObjToAllChildren(
+        //             arguments[0],
+        //             Array.from(
+        //                 domObject.children
+        //             )
+        //         );
+        //     }
+
+
+        //     // for specific type of children inside
+        //     else if (
+        //         arguments.length == 2 &&
+        //         typeof arguments[0] === 'string' &&
+        //         typeof arguments[1] === 'object'
+        //     ) {
+        //         const [selector, cssObj] = arguments;
+        //         Array.from(domObject.querySelectorAll(selector)).forEach(el => _addCss(el, cssObj));
+        //     }
+
+
+        //     else {
+        //         // throw new Error('No function override found.');
+        //     }
+
+        //     return domObject;
+        // };
+
         return domObject;
     }
 
@@ -239,11 +311,12 @@
         pTag.dataset.type = 'Txt';
         Array.from(arguments).forEach(
             args => {
-                switch (typeof args.value) {
+                const checkingValue = args.value || args;
+                switch (typeof checkingValue) {
                     case 'string':
                     case 'number':
                     case 'boolean':
-                        pTag.innerHTML = args.value;
+                        pTag.innerHTML = checkingValue;
                         break;
                 }
             }
@@ -280,6 +353,7 @@
     const proxyHandler = {
         get: function (obj, prop) { return obj[prop]; },
         set: function (obj, prop, value) {
+            console.log('');
             obj[prop] = value;
             if (prop === 'value' && Mount.updateMounted) Mount.updateMounted();
             return obj[prop];
@@ -288,13 +362,37 @@
 
 
     function _reactive(passingIn) {
-        return new Proxy(
-            {
-                value: passingIn,
-                _isReactive: true,
-            },
-            proxyHandler
-        );
+        if (Array.isArray(passingIn)) {
+            passingIn = passingIn.map(value => _reactive(value));
+            return new Proxy(
+                {
+                    value: passingIn,
+                    _isReactive: true,
+                },
+                proxyHandler
+            );
+        }
+        else {
+            switch (typeof passingIn) {
+                case 'number':
+                case 'string':
+                case 'boolean':
+                    return new Proxy(
+                        {
+                            value: passingIn,
+                            _isReactive: true,
+                        },
+                        proxyHandler
+                    );
+                case 'boolean':
+                    Object.keys(passingIn).forEach(keyName => {
+                        passingIn[keyName] = _reactive(passingIn[keyName]);
+                    });
+                    break;
+                default:
+                    throw new Error('No type inferred.');
+            }
+        }
     }
 
 
