@@ -17,7 +17,7 @@
         Txt,
         Input,
         _reactive,
-        _reactor,
+        _reactor, _R, // _R === _reactor
     } = window.TheJsUi;
 
 
@@ -31,43 +31,45 @@
         );
     };
 
+    const imgArray = _R.imgArray = [
+        ['./assets/s01.png', 'Text A'],
+        ['./assets/s02.png', 'Text A'],
+        ['./assets/s03.png', 'Text A'],
+        ['./assets/s04.png', 'Text A'],
+    ];
 
-    const
-        imgArray = _reactive([
-            ['./assets/s01.png', 'Text A'],
-            ['./assets/s02.png', 'Text A'],
-            ['./assets/s03.png', 'Text A'],
-            ['./assets/s04.png', 'Text A'],
-        ]),
-        imgArray2 = _reactive([
-            {
-                iPath: './assets/s05.png',
-                sText: 'Text A'
-            },
-            {
-                iPath: './assets/s06.png',
-                sText: 'Text A'
-            },
-        ]);
+    const imgArray2 = _R.imgArray2 = [
+        {
+            iPath: './assets/s05.png',
+            sText: 'Text A'
+        },
+        {
+            iPath: './assets/s06.png',
+            sText: 'Text A'
+        },
+    ];
 
+    _R.logoSwitch = true;
+    // let logoSwitch = _R.logoSwitch = true; <- this is not working
 
-    _reactor.logoSwitch = _reactive(true);
     (async () => {
+        console.log('_R', _R);
+
         await new Promise(res => setTimeout(res, 3000));
 
         // update of _reactive
-        _reactor.logoSwitch = false;
-        imgArray.pop();
+        _R.logoSwitch = false;
+        _R.imgArray.pop();
 
         await new Promise(res => setTimeout(res, 1000));
 
-        _reactor.logoSwitch = true;
+        _R.logoSwitch = true;
 
         // create new _reactive in adding into document
-        imgArray.push(_reactive(['./assets/s05.png', 'Not test']));
+        _R.imgArray.push(['./assets/s05.png', 'Not test']);
 
         // update reactive object
-        imgArray2[0].value.sText.value = 'yellow box';
+        _R.imgArray2[0].sText = 'yellow box';
     })();
 
 
@@ -107,7 +109,7 @@
 
                 Center(
                     Column(
-                        _reactor.logoSwitch
+                        _R.logoSwitch
                             ? Img(`./assets/icon.png`).Css({ height: '9rem', objectFit: 'contain', })
                             : Img(`./assets/s07.jpg`).Css({ height: '9rem', objectFit: 'contain', }),
                         Box(
@@ -124,19 +126,18 @@
                             Row(
                                 Center(
                                     ...imgArray.map(
-                                        el =>
-                                            ImgButtonComponent(
-                                                el[0].value,
-                                                el[1].value
-                                            )
+                                        el => ImgButtonComponent(
+                                            el[0],
+                                            el[1]
+                                        )
                                     ),
                                 ),
                             ),
                             Row(
                                 Center(
                                     ...imgArray2.map(el => ImgButtonComponent(
-                                        el.value.iPath.value,
-                                        el.value.sText.value
+                                        el.iPath,
+                                        el.sText
                                     )),
                                     Column(
                                         Img('./assets/s07.jpg'),

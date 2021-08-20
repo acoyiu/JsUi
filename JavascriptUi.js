@@ -417,63 +417,28 @@
         _reactive,
         _reactor: prox,
         _R: prox,
+        // _R === _reactor
     };
 
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
-    // const
-    //     tarTxt = _reactive('gheuorh'),
-    //     imgPath = _reactive('./pic.jpg'),
-    //     soImage = _reactive([
-    //         './so1.jpg',
-    //         './so2.jpg',
-    //         './so3.jpg',
-    //     ]);
-
-    // Mount(
-    //     document.body,
-    //     () =>
-    //         Column(
-
-
-    //         )
-    //     /**
-    //      * Available Function
-    //      * [
-    //         Column,
-    //         Row,
-    //         Center,
-    //         Box,
-    //         Img,
-    //         Txt,
-    //         Input,
-    //         Fixed, 
-    //         Absolute,
-
-    //         _reactive,
-
-    //         all.Css()
-
-
-    //         let soImage = _reactive([
-    //             './so1.jpg',
-    //             './so2.jpg',
-    //             './so3.jpg',
-    //         ]);
-
-    //         ...soImage.value.map(path =>
-    //             Img(path)
-    //         ),
-
-    //         ...soImage.value.map(path => {
-    //             return [
-    //                 Img(path),
-    //                 Txt(tarTxt2),
-    //             ];
-    //         }).flat(),
-    //      */
-
-    // );
+    /* 
+        const {
+            Mount,
+            Fixed,
+            Absolute,
+            Column,
+            Row,
+            Center,
+            Box,
+            Img,
+            Txt,
+            Input,
+            _reactive,
+            _reactor,
+            _R, // _R === _reactor
+        } = window.TheJsUi;
+    */
 })();
