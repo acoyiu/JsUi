@@ -54,7 +54,7 @@ const {
 ```
 <br/>
 
-## To exam it:
+## To try more of it:
 ```javascript
 Mount( mounting_dom_obj, function_that_return_ui );
 
@@ -92,8 +92,8 @@ _R.bar = false;
 
 Box(
     foo.value && _R.bar
-    ? Img('img/path/img1.jpg')
-    : Img('img/path/img2.jpg')
+        ? Img('img/path/img1.jpg')
+        : Img('img/path/img2.jpg')
 )
 ```
 <br/>
