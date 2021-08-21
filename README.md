@@ -86,6 +86,18 @@ _reactor || _R   // A global obj store for all state
 ```
 <br/>
 
+## Value bind
+```javascript
+const foo = _reactive('foo');
+_R.bar = 'bar';
+
+Column(
+    Txt(foo),
+    Txt(_R.bar),
+)
+```
+<br/>
+
 ## Conditional showing
 ```javascript
 const foo = _reactive(true);
