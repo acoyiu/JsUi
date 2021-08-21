@@ -132,9 +132,13 @@ Center(
 Row(
     // set attribute, class, css style and add event on input element
     Input('text')
-        .Attribute({ class: 'input class', placeholder: 'Search Google or type a URL' })
+        .Attribute({ class: 'inputer', placeholder: 'Search Google or type a URL' })
         .Css({ outline: 'none' })
         .Event('change', inputUpdate)
 )
     .Css({ height: '2rem' }) // make the row div height 2rem
+    .Css(
+        'input.inputer'
+        { width: '50vw' }
+    ) // make the first query string found element apply the css
 ```
