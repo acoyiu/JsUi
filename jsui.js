@@ -276,7 +276,7 @@
     function Input(typeString, buttonText = '') {
         const inputTag = _createEle('input');
         inputTag.dataset.type = 'Input';
-        inputTag.setAttribute('type', typeString);
+        inputTag.setAttribute('type', typeString.value || typeString);
         if (buttonText) inputTag.setAttribute('value', buttonText);
         _addCss(
             inputTag,
