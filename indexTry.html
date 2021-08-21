@@ -1,0 +1,41 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+    <script src="./jsui.js"></script>
+</head>
+
+<body></body>
+<script>
+    const {
+        Mount,
+        Fixed,
+        Absolute,
+        Column,
+        Row,
+        Center,
+        Box,
+        Img,
+        Txt,
+        Input,
+        _reactive,
+        _reactor, _R, // _R === _reactor
+    } = window.TheJsUi;
+
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    _R.showSwitch = true;
+
+    Mount(
+        document.body,
+        () =>
+            Column(
+                _R.showSwitch
+                    ? Txt('text A')
+                    : Txt('text B'),
+                Input('button')
+                    .Attribute({ value: 'toggle showSwitch', class: 'theButton' })
+                    .Event('click', () => _R.showSwitch = !_R.showSwitch)
+                    .Css({ width: '10rem' }),
+            )
+    );
+</script>

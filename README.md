@@ -55,6 +55,7 @@ const {
 <br/>
 
 ## To try more of it:
+#### or pls head to indexTry.html for playing it.
 ```javascript
 Mount( mounting_dom_obj, function_that_return_ui );
 

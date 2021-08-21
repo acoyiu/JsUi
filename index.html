@@ -109,7 +109,7 @@
                 Center(
                     Column(
                         logoSwitch.value
-                            ? Img(`./assets/icon.png`).Css({ height: '9rem', objectFit: 'contain', })
+                            ? Img(`./assets/icon.png`).Css({ height: '9rem', objectFit: 'contain', }).Event('click', () => location.href = './indexTry.html')
                             : Img(`./assets/s07.jpg`).Css({ height: '9rem', objectFit: 'contain', }),
                         Box(
                             Row(
